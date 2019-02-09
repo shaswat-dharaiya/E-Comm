@@ -7,10 +7,12 @@ package com.vvp.java;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,16 +34,57 @@ public class Checkout extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Checkout</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Checkout at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+                HttpSession session = request.getSession();
+                String check = (String) session.getAttribute("isAuth");
+                if(check!=null && check.equals("true"))
+                {
+                    out.println("<a href = \"logout\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:20px\">Log Out</a>\n" +                        
+                                "<a style = \"border-size:1; border-style: solid; background-color: white; border-color: black; border-radius: 5px;color:black;text-decoration: none;position:absolute; top:10px; right:80px\">Check Out</a>\n"+
+                                "<a href = \"viewcart\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:155px\">View Cart</a>\n"+
+                                "<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:227px\">Product Page</a>");
+                    
+                    String name = request.getParameter("pname");
+                    String add = request.getParameter("add");
+                    String no = request.getParameter("ph");
+                    String pm = request.getParameter("pm");
+                    if((name.equals(""))||(add.equals(""))||(no.equals(""))||(pm == null)){
+                        out.println("Please Fill in all the details<br>Thank you");
+                        //out.println("<br>"+name+"<br>"+add+"<br>"+no+"<br>"+pm+"");
+                        out.println("<a href = \"checkOut.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:45px; left:80px\">Go Back</a>");
+                    }
+                    else
+                    {
+                        if(pm.equals("cod"))
+                        {
+                            ArrayList objCart =(ArrayList) session.getAttribute("cart");
+                            if(objCart == null)
+                            {
+                                out.println("Cart is Empty :(");
+                            }
+                            else{
+                                out.println("Your Order:<br>");
+                                for(int i=0;i<objCart.size();i++)
+                                {
+                                    SelectedProduct temp = (SelectedProduct) objCart.get(i);
+                                    Products p = (Products) Products.products.get(new Integer(temp.pid));
+                                    p.stock -= temp.qty;
+                                    Products.products.put(new Integer(temp.pid),p);
+                                    out.println(temp.qty+" "+p.getProductName()+"<br>");
+                                }
+                                session.removeAttribute("cart");
+                                out.println("Has Been Place :D");
+                            }
+                        }
+                        else
+                        {
+                            out.println("Coming Soon, Only COD available right now :)");
+                        }
+                    }
+                }
+                else
+                {
+                        response.sendRedirect("login.html");
+                }
         } finally {
             out.close();
         }

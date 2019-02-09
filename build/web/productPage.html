@@ -11,21 +11,29 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <a href = "logout" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:20px">Log Out</a>
+        <a href = "checkOut.html" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:80px">Check Out</a>
+        <a href = "viewcart" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:155px">View Cart</a>
+        <a style = "border-size:0.1; border-style: solid; background-color: white; border-color: black; border-radius:5px;color:black;text-decoration: none;position:absolute; top:10px; right:227px">Product Page</a>
             <div>
-                <form action="productpage.do" method="post">
+                <form action="addtocart" method="Post">
                     <table>
                         <tr>
                             <img src="Images/book.jpg" alt="Book">
-                            <input type="number" value="number" name="qty">
+                            <input type="text" name="qty">
+                            <input type="hidden" value="1" name="pid">
                             <input type="submit" value="Add To Cart" name="submit">
                         </tr>
+                </form>
+                <form action="addtocart" method="Post">
                         <tr>
                             <img src="Images/pen.jpg" alt="pen">
-                            <input type="number" value="number" name="qty">
+                            <input type="text" name="qty">
+                            <input type="hidden" value="2" name="pid">
                             <input type="submit" value="Add To Cart" name="submit">
                         </tr>
-
                     </table>
+                </form>
             </div>
     </body>
 </html>

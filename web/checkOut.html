@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Check Out</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <a href = "logout" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:20px">Log Out</a>
+        <a style = "border-size:1; border-style: solid; background-color: white; border-color: black; border-radius: 5px;color:black;text-decoration: none;position:absolute; top:10px; right:80px">Check Out</a>
+        <a href = "viewcart" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:155px">View Cart</a>
+        <a href = "productPage.html" style = "border-size:0.1; border-style: solid; background-color: black; border-color: black; border-radius:5px;color:white;text-decoration: none;position:absolute; top:10px; right:227px">Product Page</a>
+        <div>
+            <form action="checkout" method="post">
+                <table>
+                    <tr><th>Name: </th>
+                        <td><input type="text" name="pname"></td>
+                    </tr>
+                    <tr><th>Address: </th>
+                        <td><input type="text" name="add"></td>
+                    </tr>
+                    <tr>
+                        <th>Contact No: </th>
+                        <td><input type="text" name="ph"></td>
+                    </tr>
+                    <tr>
+                        <th>Payment Method </th>
+                    
+                    </tr>
+                    <tr>
+                        <th>Cash on Delivery </th>
+                        <td><input type="radio" name="pm" value="cod" id="pm1"></td>
+
+                    </tr>
+                    <tr>
+                        <th>Debit Card </th>
+                        <td><input type="radio" name="pm" value="dc" id="pm2"></td>
+                    </tr>
+                    <tr>
+                        <th>Credit Card </th>
+                        <td><input type="radio" name="pm" value="cc" id="pm3"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" name="submit" value="submit"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </body>
+</html>
