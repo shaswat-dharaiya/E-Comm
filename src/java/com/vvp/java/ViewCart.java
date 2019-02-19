@@ -47,10 +47,10 @@ public class ViewCart extends HttpServlet {
             }
                 
             else
-            {
-                out.println("<table><tr><th></th></tr>");
-                out.println("<a href = \"checkOut.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:80px\">Check Out</a>");
+            {                
+                out.println("<a href = \"CheckOut.jsp\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:80px\">Check Out</a>");
                 double grandTotal = 0;
+                out.println("<table border = 1><tr><td>Product Name</td><td>Quantity</td><td>Price</td></tr>");
                 for(int i =0;i<objCart.size();i++)
                 {
                     SelectedProduct temp = (SelectedProduct) objCart.get(i);
@@ -60,9 +60,9 @@ public class ViewCart extends HttpServlet {
                     double price = p.getPrice();
                     price *= qty;
                     grandTotal += (double) price;
-                    out.println("<table><tr><td>Product Name: "+pName+"</td><td>Quantity: "+qty+"</td><td>Price: "+price+"</td></tr></table>");                    
+                    out.println("<tr><td> "+pName+"</td><td>"+qty+"</td><td>"+price+"</td></tr>");
                 }
-                out.println("<table><tr><td>Grand Total = "+grandTotal);
+                out.println("<tr><td colspan = 2></td><td>Grand Total = "+grandTotal+"</td></table>");
             }
         } finally {
             out.close();

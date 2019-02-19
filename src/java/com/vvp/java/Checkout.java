@@ -1,22 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change tdis license header, choose License Headers in Project Properties.
+ * To change tdis template file, choose Tools | Templates
+ * and open tde template in tde editor.
  */
 package com.vvp.java;
 
+import java.sql.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.util.logging.*;
+import javax.servlet.*;;
+import javax.servlet.http.*;
 
 /**
  *
- * @author Shaswat's Pc
+ * @autdor Shaswat's Pc
  */
 public class Checkout extends HttpServlet {
 
@@ -26,16 +25,33 @@ public class Checkout extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @tdrows ServletException if a servlet-specific error occurs
+     * @tdrows IOException if an I/O error occurs
+     * @tdrows java.sql.SQLException
+     * @tdrows java.lang.ClassNotFoundException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
                 HttpSession session = request.getSession();
                 String check = (String) session.getAttribute("isAuth");
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ecomm_login","root","");
+                Statement stmt = con.createStatement();
+                int usid = (Integer) session.getAttribute("uid");
+                ResultSet rs = stmt.executeQuery("select * from users where User_ID ="+usid+";");
+                String Name = null,Add = null,pno = null;
+                while(rs.next())
+                {
+                    Name = rs.getString(4);
+                    session.setAttribute("name",Name);
+                    Add = rs.getString(5);
+                    session.setAttribute("Add",Add);
+                    pno = rs.getString(6);
+                    session.setAttribute("pno",pno);   
+                }
                 if(check!=null && check.equals("true"))
                 {
                     out.println("<a href = \"logout\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:20px\">Log Out</a>\n" +                        
@@ -43,66 +59,58 @@ public class Checkout extends HttpServlet {
                                 "<a href = \"viewcart\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:155px\">View Cart</a>\n"+
                                 "<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:227px\">Product Page</a>");
                     
-                    String name = request.getParameter("pname");
-                    String add = request.getParameter("add");
-                    String no = request.getParameter("ph");
-                    String pm = request.getParameter("pm");
-                    if((name.equals(""))||(add.equals(""))||(no.equals(""))||(pm == null)){
-                        out.println("Please Fill in all the details<br>Thank you");
-                        //out.println("<br>"+name+"<br>"+add+"<br>"+no+"<br>"+pm+"");
-                        out.println("<a href = \"checkOut.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:45px; left:80px\">Go Back</a>");
-                    }
-                    else
-                    {
-                        if(pm.equals("cod"))
+                    out.println("Mr."+Name+"<br>"+Add+"<br>"+pno+"<br>");                    
+                     
+                        ArrayList objCart =(ArrayList) session.getAttribute("cart");
+                        if(objCart == null)
                         {
-                            ArrayList objCart =(ArrayList) session.getAttribute("cart");
-                            if(objCart == null)
+                            out.println("Cart is Empty :(");
+                        }
+                        else{
+                            out.println("Your Order:");
+                            out.println("<table border = 1><tr><td>Product Name</td><td>Quantity</td></tr>");
+                            for(int i=0;i<objCart.size();i++)
                             {
-                                out.println("Cart is Empty :(");
+                                SelectedProduct temp = (SelectedProduct) objCart.get(i);
+                                Products p = (Products) Products.products.get(new Integer(temp.pid));
+                                p.stock -= temp.qty;
+                                Products.products.put(new Integer(temp.pid),p);
+                                out.println("<tr><td>"+p.getProductName()+"</td><td>"+temp.qty+"</td></tr><br>");
                             }
-                            else{
-                                out.println("Your Order:<br>");
-                                for(int i=0;i<objCart.size();i++)
-                                {
-                                    SelectedProduct temp = (SelectedProduct) objCart.get(i);
-                                    Products p = (Products) Products.products.get(new Integer(temp.pid));
-                                    p.stock -= temp.qty;
-                                    Products.products.put(new Integer(temp.pid),p);
-                                    out.println(temp.qty+" "+p.getProductName()+"<br>");
-                                }
-                                session.removeAttribute("cart");
-                                out.println("Has Been Place :D");
-                            }
+                            out.println("</table>");
+                            session.removeAttribute("cart");
+                            out.println("Has Been Place :D");
                         }
-                        else
-                        {
-                            out.println("Coming Soon, Only COD available right now :)");
-                        }
-                    }
+                    
                 }
                 else
                 {
                         response.sendRedirect("login.html");
                 }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         } finally {
             out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet metdods. Click on the + sign on tde left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @tdrows ServletException if a servlet-specific error occurs
+     * @tdrows IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Checkout.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -110,13 +118,17 @@ public class Checkout extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @tdrows ServletException if a servlet-specific error occurs
+     * @tdrows IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Checkout.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

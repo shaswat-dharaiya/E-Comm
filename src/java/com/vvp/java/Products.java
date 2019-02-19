@@ -5,6 +5,7 @@
  */
 package com.vvp.java;
 
+import static com.vvp.java.Products.products;
 import java.util.HashMap;
 
 /**

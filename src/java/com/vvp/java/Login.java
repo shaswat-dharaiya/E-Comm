@@ -5,8 +5,11 @@
  */
 package com.vvp.java;
 
+import java.sql.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,32 +30,53 @@ public class Login extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.lang.ClassNotFoundException
+     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        
+        PrintWriter out = response.getWriter(); 
         try {
             String uname = request.getParameter("username");
             String pwd = request.getParameter("password");
             
             HttpSession session = request.getSession();
             
-            if(uname.equals("admin") && pwd.equals("admin"))
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ecomm_login","root","");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from users");
+            String usr = null,psd = null;
+            int uid;
+            while(rs.next() )
+            {   
+                uid = rs.getInt(1);
+                usr = rs.getString(2);
+                psd = rs.getString(3);
+                if(usr.equals(uname) && psd.equals(pwd))
+                {
+                    session.setAttribute("uid",uid);   
+                    break;
+                }
+            }
+            
+            if(uname.equals(usr) && pwd.equals(psd))
             {
                 session.setAttribute("isAuth", "true");
-                out.println("Welcome");
                 response.sendRedirect("productPage.html");
             }
             else
             {
                 session.setAttribute("isAuth", "false");
-                out.println("Try Again");
                 response.sendRedirect("login.html");
             }
-                
-        } finally {
+        }
+        catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        finally {
             out.close();
         }
     }
@@ -69,7 +93,13 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -83,7 +113,13 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
