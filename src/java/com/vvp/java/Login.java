@@ -56,6 +56,7 @@ public class Login extends HttpServlet {
                 psd = rs.getString(3);
                 if(usr.equals(uname) && psd.equals(pwd))
                 {
+                    //out.println(uid+"<br>"+usr+"<br>"+psd);
                     session.setAttribute("uid",uid);   
                     break;
                 }

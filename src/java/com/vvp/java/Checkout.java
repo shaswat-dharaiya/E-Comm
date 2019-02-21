@@ -46,11 +46,8 @@ public class Checkout extends HttpServlet {
                 while(rs.next())
                 {
                     Name = rs.getString(4);
-                    session.setAttribute("name",Name);
                     Add = rs.getString(5);
-                    session.setAttribute("Add",Add);
                     pno = rs.getString(6);
-                    session.setAttribute("pno",pno);   
                 }
                 if(check!=null && check.equals("true"))
                 {
@@ -59,12 +56,13 @@ public class Checkout extends HttpServlet {
                                 "<a href = \"viewcart\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:155px\">View Cart</a>\n"+
                                 "<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:227px\">Product Page</a>");
                     
-                    out.println("Mr."+Name+"<br>"+Add+"<br>"+pno+"<br>");                    
+                    out.println("<table border = 1><tr><th>Name</th><td>"+Name+"</td></tr><tr><th>Address</th><td>"+Add+"</td></tr><tr><th>Phone No.</th><td>"+pno+"</td></tr></table><br>");                    
                      
                         ArrayList objCart =(ArrayList) session.getAttribute("cart");
                         if(objCart == null)
                         {
                             out.println("Cart is Empty :(");
+                            out.println("<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:200px; left:227px\">Continue Shopping</a>");
                         }
                         else{
                             out.println("Your Order:");
@@ -80,6 +78,7 @@ public class Checkout extends HttpServlet {
                             out.println("</table>");
                             session.removeAttribute("cart");
                             out.println("Has Been Place :D");
+                            out.println("<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:200px; left:227px\">Continue Shopping</a>");
                         }
                     
                 }

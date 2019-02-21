@@ -43,7 +43,7 @@ public class ViewCart extends HttpServlet {
             objCart = (ArrayList) session.getAttribute("cart");
             if(objCart == null){
                 out.println("Your cart is empty");
-                //out.println("<a style = \"border-size:1; border-style: solid; background-color: white; border-color: black; border-radius: 5px;color:black;text-decoration: none;position:absolute; top:10px; right:80px\">Check Out</a>\n");
+                out.println("<a style = \"border-size:1; border-style: solid; background-color: white; border-color: black; border-radius: 5px;color:black;text-decoration: none;position:absolute; top:10px; right:80px\">Check Out</a>\n");
             }
                 
             else
