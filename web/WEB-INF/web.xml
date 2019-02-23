@@ -24,18 +24,6 @@
         <servlet-name>LogOut</servlet-name>
         <servlet-class>com.vvp.java.LogOut</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>CookieTrial</servlet-name>
-        <servlet-class>com.vvp.java.CookieTrial</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Add</servlet-name>
-        <servlet-class>com.vvp.java.Add</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Delete</servlet-name>
-        <servlet-class>com.vvp.java.Delete</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>ProductPage</servlet-name>
         <url-pattern>/productpage</url-pattern>
@@ -59,18 +47,6 @@
     <servlet-mapping>
         <servlet-name>LogOut</servlet-name>
         <url-pattern>/logout</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CookieTrial</servlet-name>
-        <url-pattern>/cookietrial</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Add</servlet-name>
-        <url-pattern>/add</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Delete</servlet-name>
-        <url-pattern>/delete</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

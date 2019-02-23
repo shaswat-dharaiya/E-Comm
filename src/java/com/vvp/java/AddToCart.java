@@ -5,12 +5,13 @@
  */
 package com.vvp.java;
 
+import com.oracle.jrockit.jfr.Producer;
+import static com.vvp.java.Products.initData;
 import com.vvp.java.Products;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,51 +36,51 @@ public class AddToCart extends HttpServlet {
     public void init(){
         Products.initData();
     }
-    
-        
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
 
         PrintWriter out = response.getWriter();
-        try {
+        try {                
                 HttpSession session = request.getSession();
                 String check = (String) session.getAttribute("isAuth");
                 
                 int pid = Integer.parseInt(request.getParameter("pid"));
                 int qty = Integer.parseInt(request.getParameter("qty"));
-
                 if(check!=null && check.equals("true"))
-                {                                        
+                {
                     if(session.getAttribute("cart")==null)
                         objCart = new ArrayList();
                     else{
                         objCart = (ArrayList) session.getAttribute("cart");
                     }
                     Products p = (Products) Products.products.get(new Integer(pid));
-                    
                     if(qty>p.getStock())
                     {
                         out.println("Out of Stock");
                         qty=0;
                         pid=0;
                     }
+                    
                     else
                     {
                         boolean change = true;
-                        SelectedProduct sp = new SelectedProduct(pid,qty);
+                        
+                        SelectedProduct sp = new SelectedProduct(pid,qty);                        
                         SelectedProduct temp;
-                        for(int i=0;i<objCart.size();i++)
+                        int stockLeft;
+                        for(int i =0;i<objCart.size();i++)
                         {
                            temp = (SelectedProduct) objCart.get(i);
                            if(pid == temp.pid)
                            {
                                Products pr = (Products) Products.products.get(new Integer(temp.pid));
-                               int stock = pr.getStock();   
-                               if(stock - qty<qty)
-                               {   
-                                   out.println("Max Stock available is: "+(stock - qty));
+                               int stock = pr.getStock();
+                               stockLeft = stock - temp.qty;
+                               if(stockLeft<qty)
+                               {
+                                   out.println("Max Stock available is: "+stockLeft);
                                    change = false;
                                    break;
                                }
@@ -95,14 +96,8 @@ public class AddToCart extends HttpServlet {
                         }
                         if(change==true)
                         {
-                            for(int i=1;i!=pid;i++)
-                            {
-                                SelectedProduct sp1 = new SelectedProduct(i,0);
-                                objCart.add(sp1);
-                            }
                             objCart.add(sp);
                         }
-                        
                         session.setAttribute("cart", objCart);
                         response.sendRedirect("productPage.html");
                     }
@@ -111,10 +106,7 @@ public class AddToCart extends HttpServlet {
                 {
                     response.sendRedirect("login.html");
                 }
-        }
-        catch(Exception e)
-        {out.print(e);}
-        finally {
+        } finally {
             out.close();
         }
     }

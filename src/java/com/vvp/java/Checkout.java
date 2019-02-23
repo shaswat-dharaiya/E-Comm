@@ -77,15 +77,8 @@ public class Checkout extends HttpServlet {
                             }
                             out.println("</table>");
                             session.removeAttribute("cart");
-                            String userData = "0_0";
-                            session.setAttribute("userData",userData);
-                            Cookie ck = new Cookie(Integer.toString(usid),"0_0");
-                            ck.setMaxAge(30*86400);
-                            response.addCookie(ck);
                             out.println("Has Been Place :D");
                             out.println("<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:200px; left:227px\">Continue Shopping</a>");
-                            
-                            
                         }
                     
                 }

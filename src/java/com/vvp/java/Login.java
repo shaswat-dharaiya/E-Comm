@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +40,7 @@ public class Login extends HttpServlet {
         try {
             String uname = request.getParameter("username");
             String pwd = request.getParameter("password");
-
+            
             HttpSession session = request.getSession();
             
             Class.forName("com.mysql.jdbc.Driver");
@@ -49,7 +48,7 @@ public class Login extends HttpServlet {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select * from users");
             String usr = null,psd = null;
-            int uid = 0;
+            int uid;
             while(rs.next() )
             {   
                 uid = rs.getInt(1);
@@ -66,23 +65,6 @@ public class Login extends HttpServlet {
             if(uname.equals(usr) && pwd.equals(psd))
             {
                 session.setAttribute("isAuth", "true");
-                Cookie[] ck = request.getCookies();
-                for(int i=0;i<ck.length;i++)
-                {
-                    if(ck[i].getName().equals(Integer.toString(uid)))
-                    {
-                        String productQty = ck[i].getValue();
-                        if(productQty!=null)
-                        {
-                            session.setAttribute("userData",productQty);
-                            break;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
                 response.sendRedirect("productPage.html");
             }
             else
