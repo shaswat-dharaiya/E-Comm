@@ -34,8 +34,8 @@ public class Products
     
     public static void initData()
     {
-        Products p1 = new Products(1,5,400.00f,"Book(s)");
-        Products p2 = new Products(2,6,30.00f,"Pen(s)");
+        Products p1 = new Products(1,9,400.00f,"Book(s)");
+        Products p2 = new Products(2,9,30.00f,"Pen(s)");
         products.put(new Integer(1), p1);
         products.put(new Integer(2), p2);
     }
