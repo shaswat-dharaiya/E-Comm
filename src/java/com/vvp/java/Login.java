@@ -79,6 +79,8 @@ public class Login extends HttpServlet {
                         }
                         else
                         {
+                            ck[i].setValue("0_0");
+                            response.addCookie(ck[i]);
                             break;
                         }
                     }

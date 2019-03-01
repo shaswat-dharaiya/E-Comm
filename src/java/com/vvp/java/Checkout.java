@@ -64,7 +64,8 @@ public class Checkout extends HttpServlet {
                             out.println("Cart is Empty :(");
                             out.println("<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:200px; left:227px\">Continue Shopping</a>");
                         }
-                        else{
+                        else
+                        {
                             out.println("Your Order:");
                             out.println("<table border = 1><tr><td>Product Name</td><td>Quantity</td></tr>");
                             for(int i=0;i<objCart.size();i++)
@@ -73,6 +74,7 @@ public class Checkout extends HttpServlet {
                                 Products p = (Products) Products.products.get(new Integer(temp.pid));
                                 p.stock -= temp.qty;
                                 Products.products.put(new Integer(temp.pid),p);
+                                if(temp.qty!=0)
                                 out.println("<tr><td>"+p.getProductName()+"</td><td>"+temp.qty+"</td></tr><br>");
                             }
                             out.println("</table>");
@@ -83,16 +85,11 @@ public class Checkout extends HttpServlet {
                             ck.setMaxAge(30*86400);
                             response.addCookie(ck);
                             out.println("Has Been Place :D");
-                            out.println("<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:200px; left:227px\">Continue Shopping</a>");
-                            
-                            
+                            out.println("<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:200px; left:227px\">Continue Shopping</a>");   
                         }
-                    
                 }
                 else
-                {
                         response.sendRedirect("login.html");
-                }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
