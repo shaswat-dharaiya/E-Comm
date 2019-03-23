@@ -12,19 +12,21 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
 
 <!DOCTYPE html>
-<html>
+
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>CheckOut</title>
     </head>
-    <body>
+    
     <a href = "logout" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:20px">Log Out</a>
     <a style = "border-size:1; border-style: solid; background-color: white; border-color: black; border-radius: 5px;color:black;text-decoration: none;position:absolute; top:10px; right:80px">Check Out</a>
     <a href = "viewcart" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:155px">View Cart</a>
     <a href = "productPage.html" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius:5px;color:white;text-decoration: none;position:absolute; top:10px; right:227px">Product Page</a>
     <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
-     url = "jdbc:mysql://localhost:3306/ecomm_login"
+     url = "jdbc:mysql://localhost:3308/EComm_login"
      user = "root" password = ""/>
+    <%--url = "jdbc:mysql://localhost:3306/ecomm_login" For windows--%>
+
 
     <sql:query dataSource = "${snapshot}" var = "result">
      SELECT * from users WHERE User_ID = ?
@@ -59,5 +61,5 @@
                 %>
          
         </table>
-    </body>
-</html>
+    
+

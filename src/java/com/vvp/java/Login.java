@@ -45,7 +45,8 @@ public class Login extends HttpServlet {
             HttpSession session = request.getSession();
             
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ecomm_login","root","");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3308/EComm_login","root","");
+            //Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/eComm_login","root",""); For windows
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select * from users");
             String usr = null,psd = null;
@@ -62,7 +63,7 @@ public class Login extends HttpServlet {
                     break;
                 }
             }
-            
+            boolean exist = false;
             if(uname.equals(usr) && pwd.equals(psd))
             {
                 session.setAttribute("isAuth", "true");
@@ -71,6 +72,7 @@ public class Login extends HttpServlet {
                 {
                     if(ck[i].getName().equals(Integer.toString(uid)))
                     {
+                        exist = true;
                         String productQty = ck[i].getValue();
                         if(productQty!=null)
                         {
@@ -84,6 +86,16 @@ public class Login extends HttpServlet {
                             break;
                         }
                     }
+                    else
+                    {
+                        exist = false;
+                    }
+                }
+                if(exist == false)
+                {
+                    Cookie newCk = new Cookie(Integer.toString(uid),"0_0");
+                    newCk.setMaxAge(30*86400);
+                    response.addCookie(newCk);
                 }
                 response.sendRedirect("productPage.html");
             }
@@ -95,7 +107,7 @@ public class Login extends HttpServlet {
         }
         catch(Exception e)
             {
-                e.printStackTrace();
+                out.print(e);
             }
         finally {
             out.close();
