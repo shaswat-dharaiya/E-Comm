@@ -82,6 +82,7 @@ public class Login extends HttpServlet {
                         else
                         {
                             ck[i].setValue("0_0");
+                            session.setAttribute("userData","0_0");
                             response.addCookie(ck[i]);
                             break;
                         }
@@ -94,6 +95,7 @@ public class Login extends HttpServlet {
                 if(exist == false)
                 {
                     Cookie newCk = new Cookie(Integer.toString(uid),"0_0");
+                    session.setAttribute("userData","0_0");
                     newCk.setMaxAge(30*86400);
                     response.addCookie(newCk);
                 }

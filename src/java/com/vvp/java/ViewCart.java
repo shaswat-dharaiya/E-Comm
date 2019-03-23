@@ -36,11 +36,15 @@ public class ViewCart extends HttpServlet {
     }
     public int[] deserializeCokie(String CookieString)
     {
-        String[] userCk = CookieString.split("_");
-        int[] data=new int[userCk.length];
-        for(int i =0;i<userCk.length;i++)
+        int[] data = null;
+        if(CookieString!=null)
         {
-                data[i] = Integer.parseInt(userCk[i]);
+            String[] userCk = CookieString.split("_");
+            data=new int[userCk.length];
+            for(int i =0;i<userCk.length;i++)
+            {
+                    data[i] = Integer.parseInt(userCk[i]);
+            }
         }
         return data;
     }
@@ -49,6 +53,7 @@ public class ViewCart extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
+            String cssTag = "<html><head><link rel=\"stylesheet\" href=\"button1.css\"></head>";
             ArrayList objCart = null;
             HttpSession session = request.getSession();
             int usid = (Integer) session.getAttribute("uid");
@@ -56,18 +61,26 @@ public class ViewCart extends HttpServlet {
             String cookieData = (String) session.getAttribute("userData");
             StringBuffer tempData = new StringBuffer(cookieData);            
             int[] productQty = deserializeCokie(cookieData);            
-            
-            out.println("<a href = \"logout\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:20px\">Log Out</a>\n" +                        
-                        "<a style = \"border-size:1; border-style: solid; background-color: white; border-color: black; border-radius: 5px;color:black;text-decoration: none;position:absolute; top:10px; right:155px\">View Cart</a>\n"+
-                        "<a href = \"productPage.html\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:227px\">Product Page</a>");
+            out.print("<html><head>\n" +
+                        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+                        "<title>CheckOut</title>\n" +
+                        "<link rel=\"stylesheet\" href=\"style1.css\">\n" +
+                        "</head><body>");
+            out.print("<a href = \"productPage.html\"class=\"class1\">Product Page</a>\n" +
+                        "<a class=\"class2\">View Cart</a>\n");
+                        
             objCart = (ArrayList) session.getAttribute("cart");
             
             if(objCart == null && cookieData.equals("0_0")){
-                out.println("Your cart is empty");
-                out.println("<a style = \"border-size:1; border-style: solid; background-color: white; border-color: black; border-radius: 5px;color:black;text-decoration: none;position:absolute; top:10px; right:80px\">Check Out</a>\n");
+                out.print("<a class=\"class2\">Check Out</a>\n" +
+                        "<a href = \"logout\" class=\"class1\">Log Out</a>");
+                out.print("<p>Your cart is empty</p>");
+                
             }   
             else
             {                
+                out.print("<a href = \"CheckOut.jsp\" class=\"class1\">Check Out</a>\n" +
+                        "<a href = \"logout\" class=\"class1\">Log Out</a>");
                 if(objCart == null && !cookieData.equals("0_0"))
                 {
                     objCart = new ArrayList();
@@ -78,7 +91,6 @@ public class ViewCart extends HttpServlet {
                         session.setAttribute("cart", objCart);
                     }
                 }
-                out.println("<a href = \"CheckOut.jsp\" style = \"border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:80px\">Check Out</a>");
                 double grandTotal = 0;
                 int qnty = 0;
                 out.println("<table border = 1><tr><td>Product Name</td><td>Quantity</td><td>Price</td></tr>");
@@ -107,8 +119,15 @@ public class ViewCart extends HttpServlet {
             Cookie finalCk = new Cookie(uid,tempData.toString());
             response.addCookie(finalCk);
             finalCk.setMaxAge(30*86400);
+            out.print("</body></html>");
         }catch(Exception e)
-        {out.print("<br>"+e);} 
+        {
+            HttpSession session = request.getSession();
+            int usid = (Integer) session.getAttribute("uid");
+            String uid = Integer.toString(usid);
+            
+            out.print(uid+"<br>"+e);
+        } 
         finally {
             out.close();
         }

@@ -6,7 +6,6 @@
 
 <%@ page import = "java.io.*,java.util.*,java.sql.*" %>
 <%@ page import= "javax.servlet.http.*,javax.servlet.*" %>
-<%@ page import="com.vvp.java.Checkout" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
@@ -16,12 +15,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>CheckOut</title>
+        <link rel="stylesheet" href="style1.css">
     </head>
     
-    <a href = "logout" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:20px">Log Out</a>
-    <a style = "border-size:1; border-style: solid; background-color: white; border-color: black; border-radius: 5px;color:black;text-decoration: none;position:absolute; top:10px; right:80px">Check Out</a>
-    <a href = "viewcart" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius: 5px;color:white;text-decoration: none;position:absolute; top:10px; right:155px">View Cart</a>
-    <a href = "productPage.html" style = "border-size:1; border-style: solid; background-color: black; border-color: black; border-radius:5px;color:white;text-decoration: none;position:absolute; top:10px; right:227px">Product Page</a>
+    <a href = "productPage.html" class="class1">Product Page</a>
+    <a href = "viewcart" class="class1">View Cart</a>
+    <a class="class2">Check Out</a>
+    <a href = "logout" class="class1">Log Out</a>
+    
     <sql:setDataSource var = "snapshot" driver = "com.mysql.jdbc.Driver"
      url = "jdbc:mysql://localhost:3308/EComm_login"
      user = "root" password = ""/>
@@ -51,15 +52,42 @@
                     <td><c:out value = "${row.PhoneNo}"/></td>
                 </c:forEach>
             </tr>
-                <%@include file= "checkOut.html" %>
+            <tr>
+                <div>
+                    <form action="CheckOut.jsp" method="get">
+                        <table> 
+                            <tr>
+                                <th>Payment Method </th>                    
+                            </tr>
+                            <tr>
+                                <td>Cash on Delivery </td>
+                                <td><input type="radio" name="pm" value="cod" id="pm1"></td>
+                            </tr>
+                            <tr>
+                                <td>Debit Card </td>
+                                <td><input type="radio" name="pm" value="dc" id="pm2"></td>
+                            </tr>
+                            <tr>
+                                <td>Credit Card </td>
+                                <td><input type="radio" name="pm" value="cc" id="pm3"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" name="submit" value="submit"></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </tr>
                 <%
                     String pm1 = request.getParameter("pm");
                     if(pm1!=null && pm1.equals("cod"))
                     {
-                        response.sendRedirect("checkout");
+                        response.sendRedirect("confirm.jsp");
+                    }
+                    else
+                    {
+                        out.print("Only COD available");
                     }
                 %>
-         
         </table>
-    
-
+    </body>

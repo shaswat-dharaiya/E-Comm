@@ -30,7 +30,7 @@ public class Products
         this.productName=productName;
     }
     
-    static HashMap<Integer,Products> products = new HashMap<Integer,Products>();
+    public static HashMap<Integer,Products> products = new HashMap<Integer,Products>();
     
     public static void initData()
     {
