@@ -36,6 +36,10 @@
         <servlet-name>Delete</servlet-name>
         <servlet-class>com.vvp.java.Delete</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>cookie</servlet-name>
+        <servlet-class>com.vvp.java.cookie</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProductPage</servlet-name>
         <url-pattern>/productpage</url-pattern>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>Delete</servlet-name>
         <url-pattern>/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>cookie</servlet-name>
+        <url-pattern>/cookie</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
